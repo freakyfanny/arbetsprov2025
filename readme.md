@@ -13,5 +13,3 @@ Lägg upp din kod i ett Git-repository (t.ex. github) och maila en länk till os
 Har du frågor om uppgiften? Tveka inte att höra av dig via e-post.
 
 Boilerplate-repo: https://github.com/FilipIntraservice/arbetsprov2025
-
-Kontakt: filip.anic@intraservice.goteborg.se
