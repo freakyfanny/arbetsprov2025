@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
+    "moduleResolution": "Node",
     "lib": ["DOM", "ESNext"],
     "jsx": "react-jsx",
-    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "@client/*": ["src/client/*"],
@@ -13,7 +13,9 @@
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src"]
+  "include": ["src", "eslint.config.js", "prisma/**/*"],
+  "exclude": ["node_modules", "build"]
 }

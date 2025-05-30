@@ -1,0 +1,147 @@
+/* ApplicationForm.css */
+
+/* Grundform */
+.form-container {
+  max-width: 36rem;
+  padding: 1.5rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-title {
+  margin: 0rem;
+}
+
+.form-description {
+  margin-top: 0.25rem;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+.legend {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-size: 1.2em;
+  color: #1f2937;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.label-required {
+  color: #b91c1c;
+}
+
+.input,
+.select {
+  width: 50%;
+  border: 1px solid #9ca3af;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.input:focus,
+.select:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+.fieldset {
+  margin-bottom: 1.5rem;
+  border: none;
+  padding: 0;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.chip-container.empty {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #f3f4f6;
+  color: black;
+  border: 1px solid black;
+  padding: 0.25rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  user-select: none;
+}
+
+.chip button {
+  background: transparent;
+  border: none;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  color: #000000;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.chip button:hover {
+  color: #b91c1c;
+}
+
+.chip button:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+  background-color: #fca5a5;
+}
+
+.helper-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.error-message {
+  color: #b91c1c;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  color: #047857;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}

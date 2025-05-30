@@ -1,0 +1,26 @@
+.application-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.application-card {
+  background-color: #ffffff;
+  border: 2px solid #1e3a8a;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-list {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
