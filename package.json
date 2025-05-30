@@ -5,6 +5,7 @@
   "scripts": {
     "start:client": "vite",
     "start:server": "nodemon --watch src --ext ts,tsx --exec tsx src/server/index.ts",
+    "db:reset": "npx prisma db push --force-reset",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --config ./jest.config.ts"
