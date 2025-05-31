@@ -31,20 +31,13 @@ main > .application-list {
   margin-top: 2rem;
 }
 
-.application-card {
+.application-list > li {
   background-color: #ffffff;
   border: 2px solid #1e3a8a;
   border-radius: 0.75rem;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: #111827;
-}
-
-.card-header {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 1rem;
 }
 
 .activity-list {
@@ -73,7 +66,7 @@ main > .application-list {
     gap: 1rem;
   }
 
-  .application-card {
+  .application-list > li {
     padding: 0.75rem;
     border-width: 1.5px;
   }

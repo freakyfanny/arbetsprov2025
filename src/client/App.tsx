@@ -56,12 +56,19 @@ function App() {
           <li>Finns inga anmälningar just nu</li>
         ) : (
           applications.map((app) => (
-            <li key={app.id} className="application-card">
-              <div className="card-header">
-                <h2 tabIndex={0}>{app.name}</h2>
-              </div>
-              <p>{app.email}</p>
-              <ul className="activity-list">
+            <li key={app.id}>
+              <h2 tabIndex={0}>{app.name}</h2>
+              <p>
+                <strong>Email:</strong>{' '}
+                <span id={`email-${app.id}`} aria-label={`E-postadress för ${app.name}`}>
+                  {app.email}
+                </span>
+              </p>
+
+              <p id={`activities-label-${app.id}`}>
+                {app.name} är intresserad av:
+              </p>
+              <ul className="activity-list" aria-labelledby={`activities-label-${app.id}`}>
                 {app.activities.map((activity, i) => (
                   <li key={i}>{activity}</li>
                 ))}
