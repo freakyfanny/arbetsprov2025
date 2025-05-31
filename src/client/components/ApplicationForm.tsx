@@ -29,6 +29,8 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
   });
 
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [formVisible, setFormVisible] = useState(true);
 
   const [state, formAction, isPending] = useActionState<ApplicationFormState | null, FormData>(
     createApplication,
@@ -37,9 +39,15 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
 
   useEffect(() => {
     if (state?.success) {
-      onSuccess();
-      setSelectedActivities([]);
-      setFormData({ name: '', email: '' });
+      setSubmitted(true);
+
+      const delay = setTimeout(() => {
+        setFormVisible(false); 
+        setSubmitted(false); 
+        onSuccess(); 
+      }, 3000); 
+
+      return () => clearTimeout(delay);
     } else if (state?.formData) {
       setFormData({
         name: state.formData.name || '',
@@ -47,6 +55,7 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
       });
       setSelectedActivities(state.formData.activities || []);
     }
+
   }, [state, onSuccess]);
 
   const addActivity = (activity: string) => {
@@ -65,162 +74,177 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
   };
 
   const availableActivities = activityList.filter((a) => !selectedActivities.includes(a));
-
+  
   return (
-    <form action={formAction} aria-labelledby="form-title" className="form-container" noValidate>
-      <div>
-        <h2 id="form-title" className="form-title">
-          Anmälan lägerverksamhet
-        </h2>
-        <p className="form-description">
-          Fyll i formuläret nedan för att anmäla dig till lägerverksamhet 2025
-        </p>
-      </div>
-
-      {state?.errors && state.errors._form && (
-        <div role="alert" className="error-message">
-          {state.errors._form.join(', ')}
-        </div>
-      )}
-
-      <fieldset className="fieldset">
-        <legend className="legend">Personuppgifter</legend>
-
-        <div className="input-container">
-          <label htmlFor="name" className="label">
-            För- och efternamn{' '}
-            <span aria-hidden="true" className="label-required">
-              *
-            </span>
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            aria-required="true"
-            className={`input ${state?.errors?.name && !formData.name ? 'input-error' : ''}`}
-            placeholder="Ditt namn"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            aria-describedby={state?.errors?.name ? 'error-name' : undefined}
-            aria-invalid={!!state?.errors?.name}
-          />
-          {state?.errors?.name && !formData.name && (
-            <p id="error-name" className="error-message" role="alert">
-              {state.errors.name.join(', ')}
-            </p>
-          )}
-        </div>
-
-        <div className="input-container">
-          <label htmlFor="email" className="label">
-            E-post{' '}
-            <span aria-hidden="true" className="label-required">
-              *
-            </span>
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            aria-required="true"
-            className={`input ${state?.errors?.email && !formData.email ? 'input-error' : ''}`}
-            placeholder="exempel@mail.com"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            aria-describedby={state?.errors?.email ? 'error-email' : undefined}
-            aria-invalid={!!state?.errors?.email}
-          />
-          {state?.errors?.email && !formData.email && (
-            <p id="error-email" className="error-message" role="alert">
-              {state.errors.email.join(', ')}
-            </p>
-          )}
-        </div>
-      </fieldset>
-
-      <fieldset className="fieldset fieldset-activity">
-        <legend className="legend">Aktiviteter</legend>
-
-        {selectedActivities.map((activity, i) => (
-          <input key={i} type="hidden" name={`activity-${i}`} value={activity} />
-        ))}
-
-        <div
-          className={`chip-container ${selectedActivities.length === 0 ? 'empty' : ''}`}
-          aria-live="polite"
-          aria-label="Valda aktiviteter"
+    <>
+      {formVisible && (
+        <form
+          action={formAction}
+          aria-labelledby="form-title"
+          className="form-container"
+          noValidate
         >
-          {selectedActivities.map((activity) => (
-            <div key={activity} className="chip">
-              <span>{activity}</span>
-              <button
-                type="button"
-                onClick={() => removeActivity(activity)}
-                aria-label={`Ta bort aktiviteten ${activity}`}
-              >
-                ✕
-              </button>
+          <div>
+            <h2 id="form-title" className="form-title">
+              Anmälan lägerverksamhet
+            </h2>
+            <p className="form-description">
+              Fyll i formuläret nedan för att anmäla dig till lägerverksamhet 2025
+            </p>
+          </div>
+
+          {state?.errors && state.errors._form && (
+            <div role="alert" className="error-message">
+              {state.errors._form.join(', ')}
             </div>
-          ))}
-        </div>
+          )}
 
-        <label htmlFor="activity-select" className="sr-only">
-          Välj aktivitet
-        </label>
-        <select
-          id="activity-select"
-          aria-describedby="activity-help"
-          className="select"
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value) {
-              addActivity(value);
-              e.target.value = '';
-            }
-          }}
-          disabled={selectedActivities.length >= 3}
-          value=""
-        >
-          <option value="" disabled>
-            -- Välj aktivitet --
-          </option>
-          {availableActivities.map((activity) => (
-            <option key={activity} value={activity}>
-              {activity}
-            </option>
-          ))}
-        </select>
-        <p id="activity-help" className="helper-text">
-          {selectedActivities.length < 1
-            ? 'Välj tre aktiviteter du är intresserad av'
-            : `${selectedActivities.length}/3 aktiviteter valda`}
-        </p>
+          <fieldset className="fieldset">
+            <legend className="legend">Personuppgifter</legend>
 
-        <div aria-live="polite" aria-atomic="true" className="sr-only">
-          {selectedActivities.length === 0
-            ? 'Inga aktiviteter valda'
-            : `Valda aktiviteter: ${selectedActivities.join(', ')}`}
-        </div>
-      </fieldset>
+            <div className="input-container">
+              <label htmlFor="name" className="label">
+                För- och efternamn{' '}
+                <span aria-hidden="true" className="label-required">
+                  *
+                </span>
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                aria-required="true"
+                className={`input ${state?.errors?.name ? 'input-error' : ''}`}
+                placeholder="Ditt namn"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                aria-describedby={state?.errors?.name ? 'error-name' : undefined}
+                aria-invalid={!!state?.errors?.name}
+              />
+              {state?.errors?.name && (
+                <p id="error-name" className="error-message" role="alert">
+                  {state.errors.name.join(', ')}
+                </p>
+              )}
+            </div>
 
-      {state?.message && !isPending && (
-        <p role="alert" className={state.success ? 'success-message' : 'error-message'}>
-          {state.message}
-        </p>
+            <div className="input-container">
+              <label htmlFor="email" className="label">
+                E-post{' '}
+                <span aria-hidden="true" className="label-required">
+                  *
+                </span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                aria-required="true"
+                className={`input ${state?.errors?.email ? 'input-error' : ''}`}
+                placeholder="exempel@mail.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                aria-describedby={state?.errors?.email ? 'error-email' : undefined}
+                aria-invalid={!!state?.errors?.email}
+              />
+              {state?.errors?.email && (
+                <p id="error-email" className="error-message" role="alert">
+                  {state.errors.email.join(', ')}
+                </p>
+              )}
+            </div>
+          </fieldset>
+
+          <fieldset className="fieldset fieldset-activity">
+            <legend className="legend">Aktiviteter</legend>
+
+            {selectedActivities.map((activity, i) => (
+              <input key={i} type="hidden" name={`activity-${i}`} value={activity} />
+            ))}
+
+            <div
+              className={`chip-container ${selectedActivities.length === 0 ? 'empty' : ''}`}
+              aria-live="polite"
+              aria-label="Valda aktiviteter"
+            >
+              {selectedActivities.map((activity) => (
+                <div key={activity} className="chip">
+                  <span>{activity}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeActivity(activity)}
+                    aria-label={`Ta bort aktiviteten ${activity}`}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <label htmlFor="activity-select" className="sr-only">
+              Välj aktivitet
+            </label>
+            <select
+              id="activity-select"
+              aria-describedby="activity-help"
+              className="select"
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value) {
+                  addActivity(value);
+                  e.target.value = '';
+                }
+              }}
+              disabled={selectedActivities.length >= 3}
+              value=""
+            >
+              <option value="" disabled>
+                -- Välj aktivitet --
+              </option>
+              {availableActivities.map((activity) => (
+                <option key={activity} value={activity}>
+                  {activity}
+                </option>
+              ))}
+            </select>
+            <p id="activity-help" className="helper-text">
+              {selectedActivities.length < 1
+                ? 'Välj tre aktiviteter du är intresserad av'
+                : `${selectedActivities.length}/3 aktiviteter valda`}
+            </p>
+
+            <div aria-live="polite" aria-atomic="true" className="sr-only">
+              {selectedActivities.length === 0
+                ? 'Inga aktiviteter valda'
+                : `Valda aktiviteter: ${selectedActivities.join(', ')}`}
+            </div>
+          </fieldset>
+
+          {state?.message && !isPending && (
+            <p role="alert" className={state.success ? 'success-message' : 'error-message'}>
+              {state.message}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isPending || selectedActivities.length !== 3}
+            className="button"
+            aria-busy={isPending}
+          >
+            {isPending ? 'Skickar...' : 'Skicka in anmälan'}
+          </button>
+
+          {submitted && (
+            <div className="confirmation-message" role="status">
+              ✅ Din anmälan har skickats!
+            </div>
+          )}
+        </form>
       )}
-
-      <button
-        type="submit"
-        disabled={isPending || selectedActivities.length !== 3}
-        className="button"
-        aria-busy={isPending}
-      >
-        {isPending ? 'Skickar...' : 'Skicka in anmälan'}
-      </button>
-    </form>
+    </>
   );
 };
 

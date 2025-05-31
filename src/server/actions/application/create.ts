@@ -6,8 +6,8 @@ const prisma = new PrismaClient();
 const router = Router();
 
 const ApplicationSchema = z.object({
-  name: z.string().min(1, "Namn krävs"),
-  email: z.string().email("Ogiltig e-postadress"),
+  name: z.string().min(3, "Namn krävs, minst 3 täcken långt."),
+  email: z.string().email("Ogiltig e-postadress, var vänlig ange en epost adress som är giltig. Exempel dittnamn@domain.com"),
   activities: z
     .array(z.string())
     .min(3, "Minst 3 aktiviteter krävs")

@@ -23,7 +23,8 @@ main > .application-list {
 
 .application-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin: 0;
   gap: 1.5rem;
   list-style: none;
   padding: 0;
