@@ -1,38 +1,51 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useActionState } from "react";
-import { ApplicationFormState, createApplication } from "../actions/create";
-import "./ApplicationForm.css";
+import React, { useState, useEffect } from 'react';
+import { useActionState } from 'react';
+import { ApplicationFormState, createApplication } from '../actions/create';
+import './ApplicationForm.css';
 
 type Props = {
   onSuccess: () => void;
 };
 
 const activityList = [
-  "Fotboll",
-  "Simning",
-  "Friidrott",
-  "Dans",
-  "Teater",
-  "Musik",
-  "Konst",
-  "Matlagning",
-  "Skapande",
-  "Lägerbål",
+  'Fotboll',
+  'Simning',
+  'Friidrott',
+  'Dans',
+  'Teater',
+  'Musik',
+  'Konst',
+  'Matlagning',
+  'Skapande',
+  'Lägerbål',
 ];
 
 const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+  });
+
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
-  const [state, formAction, isPending] = useActionState<
-    ApplicationFormState | null,
-    FormData
-  >(createApplication, null);
+
+  const [state, formAction, isPending] = useActionState<ApplicationFormState | null, FormData>(
+    createApplication,
+    null
+  );
 
   useEffect(() => {
     if (state?.success) {
       onSuccess();
       setSelectedActivities([]);
+      setFormData({ name: '', email: '' });
+    } else if (state?.formData) {
+      setFormData({
+        name: state.formData.name || '',
+        email: state.formData.email || '',
+      });
+      setSelectedActivities(state.formData.activities || []);
     }
   }, [state, onSuccess]);
 
@@ -51,17 +64,10 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
     setSelectedActivities(selectedActivities.filter((a) => a !== activity));
   };
 
-  const availableActivities = activityList.filter(
-    (a) => !selectedActivities.includes(a)
-  );
+  const availableActivities = activityList.filter((a) => !selectedActivities.includes(a));
 
   return (
-    <form
-      action={formAction}
-      aria-labelledby="form-title"
-      className="form-container"
-      noValidate
-    >
+    <form action={formAction} aria-labelledby="form-title" className="form-container" noValidate>
       <div>
         <h2 id="form-title" className="form-title">
           Anmälan lägerverksamhet
@@ -71,11 +77,18 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
         </p>
       </div>
 
+      {state?.errors && state.errors._form && (
+        <div role="alert" className="error-message">
+          {state.errors._form.join(', ')}
+        </div>
+      )}
+
       <fieldset className="fieldset">
         <legend className="legend">Personuppgifter</legend>
+
         <div className="input-container">
           <label htmlFor="name" className="label">
-            För- och efternamn{" "}
+            För- och efternamn{' '}
             <span aria-hidden="true" className="label-required">
               *
             </span>
@@ -86,14 +99,23 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
             type="text"
             required
             aria-required="true"
-            className="input"
+            className={`input ${state?.errors?.name && !formData.name ? 'input-error' : ''}`}
             placeholder="Ditt namn"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            aria-describedby={state?.errors?.name ? 'error-name' : undefined}
+            aria-invalid={!!state?.errors?.name}
           />
+          {state?.errors?.name && !formData.name && (
+            <p id="error-name" className="error-message" role="alert">
+              {state.errors.name.join(', ')}
+            </p>
+          )}
         </div>
 
         <div className="input-container">
           <label htmlFor="email" className="label">
-            E-post{" "}
+            E-post{' '}
             <span aria-hidden="true" className="label-required">
               *
             </span>
@@ -104,28 +126,30 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
             type="email"
             required
             aria-required="true"
-            className="input"
+            className={`input ${state?.errors?.email && !formData.email ? 'input-error' : ''}`}
             placeholder="exempel@mail.com"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            aria-describedby={state?.errors?.email ? 'error-email' : undefined}
+            aria-invalid={!!state?.errors?.email}
           />
+          {state?.errors?.email && !formData.email && (
+            <p id="error-email" className="error-message" role="alert">
+              {state.errors.email.join(', ')}
+            </p>
+          )}
         </div>
       </fieldset>
 
-      <fieldset className="fieldset">
+      <fieldset className="fieldset fieldset-activity">
         <legend className="legend">Aktiviteter</legend>
 
         {selectedActivities.map((activity, i) => (
-          <input
-            key={i}
-            type="hidden"
-            name={`activity-${i}`}
-            value={activity}
-          />
+          <input key={i} type="hidden" name={`activity-${i}`} value={activity} />
         ))}
 
         <div
-          className={`chip-container ${
-            selectedActivities.length === 0 ? "empty" : ""
-          }`}
+          className={`chip-container ${selectedActivities.length === 0 ? 'empty' : ''}`}
           aria-live="polite"
           aria-label="Valda aktiviteter"
         >
@@ -154,11 +178,11 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
             const value = e.target.value;
             if (value) {
               addActivity(value);
-              e.target.value = "";
+              e.target.value = '';
             }
           }}
           disabled={selectedActivities.length >= 3}
-          defaultValue=""
+          value=""
         >
           <option value="" disabled>
             -- Välj aktivitet --
@@ -170,35 +194,22 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
           ))}
         </select>
         <p id="activity-help" className="helper-text">
-          {selectedActivities.length}/3 aktiviteter valda
+          {selectedActivities.length < 1
+            ? 'Välj tre aktiviteter du är intresserad av'
+            : `${selectedActivities.length}/3 aktiviteter valda`}
         </p>
 
         <div aria-live="polite" aria-atomic="true" className="sr-only">
           {selectedActivities.length === 0
-            ? "Inga aktiviteter valda"
-            : `Valda aktiviteter: ${selectedActivities.join(", ")}`}
+            ? 'Inga aktiviteter valda'
+            : `Valda aktiviteter: ${selectedActivities.join(', ')}`}
         </div>
       </fieldset>
 
       {state?.message && !isPending && (
-        <p
-          role="alert"
-          className={state.success ? "success-message" : "error-message"}
-        >
+        <p role="alert" className={state.success ? 'success-message' : 'error-message'}>
           {state.message}
         </p>
-      )}
-
-      {state?.errors && (
-        <div role="alert" className="error-message">
-          {Object.entries(state.errors).map(([field, msgs]) =>
-            msgs.map((msg, idx) => (
-              <p key={`${field}-${idx}`}>
-                {field === "_form" ? msg : `${field}: ${msg}`}
-              </p>
-            ))
-          )}
-        </div>
       )}
 
       <button
@@ -207,7 +218,7 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
         className="button"
         aria-busy={isPending}
       >
-        {isPending ? "Skickar..." : "Skicka in anmälan"}
+        {isPending ? 'Skickar...' : 'Skicka in anmälan'}
       </button>
     </form>
   );

@@ -1,50 +1,49 @@
-/* ApplicationForm.css */
-
-/* Grundform */
 .form-container {
-  max-width: 36rem;
+  max-width: 100%;
+  width: min(100%, 36rem);
   padding: 1.5rem;
-  border: 2px solid #1e3a8a;
+  border: 2px solid #000;
   border-radius: 0.375rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   color: #000000;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  gap: 1.5rem;
 }
 
 .form-title {
-  margin: 0rem;
+  margin: 0;
 }
 
 .form-description {
   margin-top: 0.25rem;
 }
 
-fieldset {
-  display: flex;
-  flex-direction: column;
-}
-
-.legend {
-  margin-bottom: 0.25rem;
-  font-weight: 600;
-  font-size: 1.2em;
-  color: #1f2937;
+.fieldset {
+  border: none;
+  padding: 0;
+  display: grid;
+  row-gap: 0.5rem;
+  max-width: 50%;
+  column-gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .input-container {
-  display: flex;
-  flex-direction: column;
+  grid-column: 1/-1;
+  display: grid;
   gap: 0.25rem;
-  margin-bottom: 1rem;
+}
+
+.input-error {
+  outline: 2px solid #c80909;
+  outline-offset: 2px;
 }
 
 .label {
-  font-weight: 600;
+  font-weight: 500;
   color: #1f2937;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 1.6vw, 1rem);
 }
 
 .label-required {
@@ -53,8 +52,7 @@ fieldset {
 
 .input,
 .select {
-  width: 50%;
-  border: 1px solid #9ca3af;
+  border: 1px solid #000000;
   border-radius: 0.375rem;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
@@ -68,80 +66,113 @@ fieldset {
   border-color: #2563eb;
 }
 
-.fieldset {
-  margin-bottom: 1.5rem;
-  border: none;
-  padding: 0;
-}
-
 .chip-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  margin-bottom: 1rem;
 }
 
-.chip-container.empty {
-  display: none;
+.select {
+  grid-column: 1 / -1;
+  width: 100%;
 }
 
 .chip {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: auto 1.25rem;
   align-items: center;
-  gap: 0.25rem;
-  background-color: #f3f4f6;
+  background-color: #e4e2e2;
   color: black;
   border: 1px solid black;
   padding: 0.25rem 0.75rem;
   border-radius: 5px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  font-weight: 500;
   user-select: none;
+  position: relative;
 }
 
 .chip button {
+  position: absolute;
+  right: 5%;
   background: transparent;
   border: none;
-  margin-left: 0.25rem;
   cursor: pointer;
   color: #000000;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    transform 0.15s ease-in-out; /* add transform transition */
 }
 
 .chip button:hover {
-  color: #b91c1c;
+  color: #000;
+  font-weight: 800;
+  transform: scale(1.2);
 }
 
 .chip button:focus-visible {
-  outline: 2px solid #000000;
+  outline: 2px solid #2563eb;
   outline-offset: 2px;
-  background-color: #fca5a5;
 }
 
 .helper-text {
   font-size: 0.875rem;
   color: #6b7280;
-  margin-top: 0.25rem;
+  margin-top: 0;
 }
 
 .error-message {
-  color: #b91c1c;
+  color: #940000;
   font-size: 0.875rem;
-  margin-bottom: 1rem;
+  margin-top: 0;
 }
 
 .success-message {
   color: #047857;
   font-size: 0.875rem;
-  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    width: fit-content;
+    padding: 1rem;
+    border-width: 1px;
+    box-shadow: none;
+  }
+
+  .fieldset {
+    max-width: 100% !important;
+    grid-template-columns: 1fr !important;
+    column-gap: 0 !important;
+    row-gap: 1rem;
+  }
+
+  .input-container {
+    grid-column: auto !important;
+  }
+
+  .chip-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+    gap: 0.25rem;
+  }
+
+  .chip {
+    font-size: 0.85rem;
+  }
+
+  .select {
+    font-size: 1rem;
+  }
+
+  .button {
+    max-width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
 }

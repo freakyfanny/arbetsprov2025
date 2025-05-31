@@ -1,9 +1,33 @@
+main {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+main > h1 {
+  grid-row: 1;
+}
+
+main > .button {
+  grid-row: 2;
+}
+
+main > #application-form {
+  grid-row: 3;
+}
+
+main > .application-list {
+  grid-row: 4;
+}
+
 .application-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   list-style: none;
   padding: 0;
   margin-top: 2rem;
-  display: flex;
-  gap: 1.5rem;
 }
 
 .application-card {
@@ -12,15 +36,44 @@
   border-radius: 0.75rem;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #111827;
 }
 
 .card-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
+  gap: 1rem;
 }
 
 .activity-list {
   margin-top: 0.5rem;
   padding-left: 1rem;
+}
+
+@media (max-width: 600px) {
+  main {
+    grid-template-rows: auto auto auto auto;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  main > h1,
+  main > .button,
+  main > #application-form,
+  main > .application-list {
+    grid-row: auto;
+    grid-column: 1 / -1;
+  }
+
+  .application-list {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .application-card {
+    padding: 0.75rem;
+    border-width: 1.5px;
+  }
 }

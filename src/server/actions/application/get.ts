@@ -12,7 +12,7 @@ router.get("/applications/get", async (req, res) => {
 
     const parsedApplications = applications.map(app => ({
       ...app,
-      activities: app.activities.split(",").map(a => a.trim()), // trimma mellanslag
+      activities: app.activities.split(",").map(a => a.trim()),
     }));
 
     res.json(parsedApplications);

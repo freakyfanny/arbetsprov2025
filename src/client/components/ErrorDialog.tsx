@@ -10,13 +10,13 @@ const ErrorDialog: React.FC<ErrorDialogProps> = ({ errorMessage, onClose }) => {
 
   useEffect(() => {
     if (dialogRef.current) {
-      dialogRef.current.showModal(); // Show the dialog when the error happens
+      dialogRef.current.showModal();
     }
   }, [errorMessage]);
 
   const handleClose = () => {
     if (dialogRef.current) {
-      dialogRef.current.close(); // Close the dialog
+      dialogRef.current.close();
     }
     onClose();
   };

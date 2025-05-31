@@ -1,7 +1,6 @@
 import request from 'supertest';
 import app from './index';
 
-// Mocking `import.meta` for Jest tests
 beforeAll(() => {
   (globalThis as any).import = {
     meta: {

@@ -6,6 +6,7 @@ export interface ApplicationFormState {
     activities?: string[];
     _form?: string[];
   };
+  formData?: { name?: string, email?:string, activities?:string[]}, 
   success?: boolean;
 }
 
@@ -17,7 +18,6 @@ export async function createApplication(
   const email = formData.get("email")?.toString().trim() || "";
   const activities: string[] = [];
 
-  // Validate activities
   for (let i = 0; i < 3; i++) {
     const activity = formData.get(`activity-${i}`)?.toString().trim() || "";
     if (!activity) {
