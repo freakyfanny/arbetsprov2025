@@ -36,6 +36,10 @@ function App() {
     if (queryError) setError(queryError.message);
   }, [queryError]);
 
+  useEffect(() => {
+    if (!showForm) refetch();
+  }, [showForm]);
+
   const closeErrorDialog = () => {
     setError(null);
   };
@@ -66,16 +70,15 @@ function App() {
           applications.map((app) => (
             <li key={app.id}>
               <h2 tabIndex={0}>{app.name}</h2>
-              <p>
-                <strong>Email:</strong>{' '}
-                <span id={`email-${app.id}`} aria-label={`E-postadress för ${app.name}`}>
-                  {app.email}
-                </span>
-              </p>
+              <a
+                href={`mailto:${app.email}`}
+                id={`email-${app.id}`}
+                aria-label={`E-postadress för ${app.name}`}
+              >
+                {app.email}
+              </a>
 
-              <p id={`activities-label-${app.id}`}>
-                {app.name} är intresserad av:
-              </p>
+              <p id={`activities-label-${app.id}`}>{app.name} är intresserad av:</p>
               <ul className="activity-list" aria-labelledby={`activities-label-${app.id}`}>
                 {app.activities.map((activity, i) => (
                   <li key={i}>{activity}</li>

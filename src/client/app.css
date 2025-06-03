@@ -33,11 +33,11 @@ main > .application-list {
 
 .application-list > li {
   background-color: #ffffff;
-  border: 2px solid #1e3a8a;
+  border: 2px solid var(border-color);
   border-radius: 0.75rem;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color: #111827;
+  color: var(--text-color);
 }
 
 .activity-list {

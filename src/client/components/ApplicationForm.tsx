@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useActionState } from 'react';
 import { ApplicationFormState, createApplication } from '../actions/create';
 import './ApplicationForm.css';
+import ActivitySelect from './ActivitySelect';
 
 type Props = {
   onSuccess: () => void;
@@ -42,10 +43,10 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
       setSubmitted(true);
 
       const delay = setTimeout(() => {
-        setFormVisible(false); 
-        setSubmitted(false); 
-        onSuccess(); 
-      }, 3000); 
+        setFormVisible(false);
+        setSubmitted(false);
+        onSuccess();
+      }, 3000);
 
       return () => clearTimeout(delay);
     } else if (state?.formData) {
@@ -55,7 +56,6 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
       });
       setSelectedActivities(state.formData.activities || []);
     }
-
   }, [state, onSuccess]);
 
   const addActivity = (activity: string) => {
@@ -74,7 +74,7 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
   };
 
   const availableActivities = activityList.filter((a) => !selectedActivities.includes(a));
-  
+
   return (
     <>
       {formVisible && (
@@ -183,37 +183,11 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
               ))}
             </div>
 
-            <label htmlFor="activity-select" className="sr-only">
-              Välj aktivitet
-            </label>
-            <select
-              id="activity-select"
-              aria-describedby="activity-help"
-              className="select"
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value) {
-                  addActivity(value);
-                  e.target.value = '';
-                }
-              }}
-              disabled={selectedActivities.length >= 3}
-              value=""
-            >
-              <option value="" disabled>
-                -- Välj aktivitet --
-              </option>
-              {availableActivities.map((activity) => (
-                <option key={activity} value={activity}>
-                  {activity}
-                </option>
-              ))}
-            </select>
-            <p id="activity-help" className="helper-text">
-              {selectedActivities.length < 1
-                ? 'Välj tre aktiviteter du är intresserad av'
-                : `${selectedActivities.length}/3 aktiviteter valda`}
-            </p>
+            <ActivitySelect
+              availableActivities={availableActivities}
+              selectedActivities={selectedActivities}
+              addActivity={addActivity}
+            />
 
             <div aria-live="polite" aria-atomic="true" className="sr-only">
               {selectedActivities.length === 0
