@@ -106,7 +106,7 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
               <label htmlFor="name" className="label">
                 För- och efternamn{' '}
                 <span aria-hidden="true" className="label-required">
-                  *
+                  Obligatoriskt fält
                 </span>
               </label>
               <input
@@ -133,7 +133,7 @@ const ApplicationForm: React.FC<Props> = ({ onSuccess }) => {
               <label htmlFor="email" className="label">
                 E-post{' '}
                 <span aria-hidden="true" className="label-required">
-                  *
+                  Obligatoriskt fält
                 </span>
               </label>
               <input

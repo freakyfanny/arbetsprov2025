@@ -36,7 +36,7 @@
 }
 
 .input-error {
-  outline: 2px solid #c80909;
+  outline: 2px solid #b91c1c;
   outline-offset: 2px;
 }
 
@@ -44,10 +44,17 @@
   font-weight: 500;
   color: #1f2937;
   font-size: clamp(0.9rem, 1.6vw, 1rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  width: 100%;
 }
 
 .label-required {
-  color: #b91c1c;
+  border: 1px solid rgba(245, 158, 11, 1);
+  border-radius: 0.375rem;
+  padding: 0rem 0.25rem;
+  background-color: rgba(245, 158, 11, 0.5);
 }
 
 .input,
@@ -128,7 +135,7 @@
 }
 
 .error-message {
-  color: #940000;
+  color: #b91c1c;
   font-size: 0.875rem;
   margin-top: 0;
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ApplicationForm from './components/ApplicationForm';
 import './app.css';
 import ErrorDialog from './components/ErrorDialog';
+import { useQuery } from '@tanstack/react-query';
 
 type Application = {
   id: string;
@@ -12,21 +13,28 @@ type Application = {
 };
 
 function App() {
-  const [applications, setApplications] = useState<Application[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const {
+    data: applications = [],
+    error: queryError,
+    isLoading,
+    refetch,
+  } = useQuery<Application[], Error>({
+    queryKey: ['applications'],
+    queryFn: async () => {
+      const res = await fetch('http://localhost:3001/applications/get');
+      if (!res.ok) {
+        throw new Error('Failed to fetch applications');
+      }
+      return res.json();
+    },
+  });
+
   useEffect(() => {
-    fetch('http://localhost:3001/applications/get')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch applications');
-        }
-        return res.json();
-      })
-      .then(setApplications)
-      .catch((error) => setError(error.message));
-  }, [showForm]);
+    if (queryError) setError(queryError.message);
+  }, [queryError]);
 
   const closeErrorDialog = () => {
     setError(null);
